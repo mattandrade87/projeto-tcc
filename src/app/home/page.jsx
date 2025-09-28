@@ -4,10 +4,13 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center px-4 py-8">
       <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-lg">
+        <div className="text-center">
         <Title>CONSTRUÇÃO CIVIL</Title>
+        <p className="text-xl">Bem Vindo Jorge!</p>
+        </div>
+  
         <div className="max-w-md mx-auto mt-8 gap-2 flex flex-col">
-          <Button>Orçamento</Button>
-          <Button>Cliente</Button>
+          <Button>Bater Ponto </Button>
           <Button>Serviços</Button>
           <Button>Relatórios</Button>
           <div className="text-center ">
