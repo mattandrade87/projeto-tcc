@@ -14,7 +14,7 @@ export default function Home() {
           <Button href="/servicos">Serviços</Button>
           <Button href="/relatorios">Relatórios</Button>
           <div className="text-center ">
-            <button className="bg-red-400  cursor-pointer hover:bg-red-600 p-1 rounded text-white px-6">
+            <button className="bg-[#ff2323] cursor-pointer hover:bg-red-600 p-1 rounded text-white px-6">
               Sair
             </button>
           </div>

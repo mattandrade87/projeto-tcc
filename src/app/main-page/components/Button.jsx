@@ -15,7 +15,7 @@ export default function Button({
   return (
     <Link
       href={href}
-      className={`block bg-indigo-400 cursor-pointer w-full hover:bg-indigo-600 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] focus:ring-4 focus:ring-blue-300 outline-none text-center ${sizes[size]} ${className}`}
+      className={`block bg-indigo-500 cursor-pointer w-full hover:bg-indigo-600 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] focus:ring-4 focus:ring-blue-300 outline-none text-center ${sizes[size]} ${className}`}
     >
       {children}
     </Link>
