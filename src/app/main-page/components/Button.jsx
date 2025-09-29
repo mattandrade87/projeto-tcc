@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const sizes = {
   sm: "px-3 py-1 text-sm",
   md: "px-6 py-3 text-base",
@@ -6,20 +8,16 @@ const sizes = {
 
 export default function Button({
   children,
-  type = "button",
-  onClick,
-  disabled = false,
+  href,
   className = "",
   size = "md",
 }) {
   return (
-    <button
-      type={type}
-      onClick={onClick}
-      disabled={disabled}
-      className={`bg-blue-600 cursor-pointer hover:bg-blue-700 disabled:bg-gray-400 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] focus:ring-4 focus:ring-blue-300 outline-none ${sizes[size]} ${className}`}
+    <Link
+      href={href}
+      className={`block bg-indigo-400 cursor-pointer w-full hover:bg-indigo-600 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] focus:ring-4 focus:ring-blue-300 outline-none text-center ${sizes[size]} ${className}`}
     >
       {children}
-    </button>
+    </Link>
   );
 }

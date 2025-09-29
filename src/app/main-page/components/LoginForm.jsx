@@ -53,7 +53,9 @@ export default function LoginForm() {
       </div>
 
       <div className="mt-6 w-full">
-        <Button type="submit" className="w-full" href="home">Entrar</Button>
+        <Button type="submit" href="/home" className="w-full">
+          Entrar
+        </Button>
       </div>
 
       <div className="mt-4 text-center">
