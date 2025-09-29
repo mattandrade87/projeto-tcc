@@ -7,6 +7,7 @@ export default function Home() {
         <div className="text-center">
           <Title>CONSTRUÇÃO CIVIL</Title>
           <p className="text-xl">Bem Vindo Jorge!</p>
+          <p className="text-xl">Analista de RH</p>
         </div>
 
         <div className="max-w-md mx-auto mt-8 gap-2 flex flex-col">
