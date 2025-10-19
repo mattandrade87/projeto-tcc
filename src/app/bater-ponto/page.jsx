@@ -1,128 +1,113 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
-import BackButton from "../ui/BackButton";
+import { useEffect, useState } from "react";
+import { ClockingAPI } from "@/services/api";
+import Loader from "@/app/ui/Loader.jsx";
+import { useToast } from "@/context/ToastContext.jsx";
+import { Title } from "@/app/main-page/components";
 
-function Loader() {
-  return (
-    <div
-      style={{
-        position: "absolute",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        background: "rgba(255,255,255,0.8)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        zIndex: 10,
-      }}
-    >
-      <span>Carregando mapa...</span>
-    </div>
-  );
-}
+export default function BaterPontoPage() {
+  const [today, setToday] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [acting, setActing] = useState(false);
+  const toast = useToast();
 
-function MapLeaflet({
-  center = [-23.5505, -46.6333],
-  zoom = 13,
-  height = "30vh",
-}) {
-  const mapRef = useRef(null);
-  const [mapLoaded, setMapLoaded] = useState(false);
+  const load = async () => {
+    setLoading(true);
+    try {
+      const data = await ClockingAPI.getToday();
+      setToday(data);
+    } catch (e) {
+      toast.show(e?.message || "Erro ao carregar ponto", "error");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const leafletCss = document.createElement("link");
-    leafletCss.rel = "stylesheet";
-    leafletCss.href = "https://unpkg.com/leaflet/dist/leaflet.css";
-    document.head.appendChild(leafletCss);
-
-    const leafletScript = document.createElement("script");
-    leafletScript.src = "https://unpkg.com/leaflet/dist/leaflet.js";
-    leafletScript.async = true;
-    leafletScript.onload = () => {
-      if (window.L && mapRef.current) {
-        const map = window.L.map(mapRef.current).setView(center, zoom);
-        window.L.tileLayer(
-          "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-          {
-            attribution:
-              '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-          }
-        ).addTo(map);
-        // Adiciona marcador central
-        window.L.marker(center).addTo(map);
-        setMapLoaded(true);
-      }
-    };
-    document.body.appendChild(leafletScript);
-
-    return () => {
-      document.head.removeChild(leafletCss);
-      document.body.removeChild(leafletScript);
-    };
-  }, [center, zoom]);
-
-  return (
-    <div style={{ position: "relative", width: "100%", height }}>
-      {!mapLoaded && <Loader />}
-      <div
-        ref={mapRef}
-        id="map-container"
-        style={{
-          width: "100%",
-          height: "100%",
-          borderRadius: "1rem",
-          opacity: mapLoaded ? 1 : 0,
-          transition: "opacity 0.3s",
-        }}
-      />
-    </div>
-  );
-}
-
-export default function BaterPonto() {
-  const [dateTime, setDateTime] = useState("");
-
-  useEffect(() => {
-    const updateDateTime = () => {
-      const now = new Date();
-      const formatted = now.toLocaleString("pt-BR", {
-        dateStyle: "full",
-        timeStyle: "short",
-      });
-      setDateTime(formatted);
-    };
-
-    updateDateTime(); // primeira renderização
-    const interval = setInterval(updateDateTime, 1000); // atualiza a cada 1s
-
-    return () => clearInterval(interval); // cleanup
+    load();
   }, []);
+
+  const act = async (action) => {
+    setActing(true);
+    try {
+      await action();
+      toast.show("Registro atualizado", "success");
+      await load();
+    } catch (e) {
+      toast.show(e?.message || "Falha na operação", "error");
+    } finally {
+      setActing(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center px-4 py-8">
-      <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-lg">
-        <BackButton />
-        <div className="flex items-center mb-6">
-          <div className="flex-1 text-center">
-            <h1 className="text-2xl text-gray-800 font-semibold">
-              Jorge Almeida
-            </h1>
+      <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-2xl">
+        <div className="mb-4 text-center">
+          <Title>Bater Ponto</Title>
+        </div>
+        {loading ? (
+          <div className="flex justify-center py-8">
+            <Loader />
           </div>
-        </div>
-        <MapLeaflet />
-
-        <div className="text-center mt-6">
-          {/* Data e hora */}
-          <p className="text-gray-600 mb-3 font-medium">{dateTime}</p>
-
-          {/* Botão */}
-          <button className="bg-blue-600 cursor-pointer hover:bg-blue-700 p-3 rounded text-white px-6 w-full">
-            Bater Ponto
-          </button>
-        </div>
+        ) : (
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <Info label="Início Trabalho" value={today?.startWork} />
+              <Info label="Início Almoço" value={today?.startLunch} />
+              <Info label="Fim Almoço" value={today?.endLunch} />
+              <Info label="Fim Expediente" value={today?.endWork} />
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-6">
+              <Action
+                label="Início trabalho"
+                disabled={acting}
+                onClick={() => act(ClockingAPI.startWork)}
+              />
+              <Action
+                label="Início almoço"
+                disabled={acting}
+                onClick={() => act(ClockingAPI.startLunch)}
+              />
+              <Action
+                label="Fim almoço"
+                disabled={acting}
+                onClick={() => act(ClockingAPI.endLunch)}
+              />
+              <Action
+                label="Fim expediente"
+                disabled={acting}
+                onClick={() => act(ClockingAPI.endWork)}
+              />
+            </div>
+          </div>
+        )}
       </div>
     </div>
+  );
+}
+
+function Info({ label, value }) {
+  return (
+    <div className="p-4 border rounded-lg">
+      <div className="text-sm text-gray-500">{label}</div>
+      <div className="font-semibold">
+        {value ? new Date(value).toLocaleTimeString() : "--:--"}
+      </div>
+    </div>
+  );
+}
+
+function Action({ label, onClick, disabled }) {
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      className={`bg-indigo-600 text-white px-4 py-3 rounded-lg ${
+        disabled ? "opacity-70 cursor-not-allowed" : "hover:bg-indigo-700"
+      }`}
+    >
+      {label}
+    </button>
   );
 }

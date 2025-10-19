@@ -1,5 +1,7 @@
 import { Oswald } from "next/font/google";
 import "./globals.css";
+import { AuthProvider } from "@/context/AuthContext.jsx";
+import { ToastProvider } from "@/context/ToastContext.jsx";
 
 const oswald = Oswald({
   variable: "--font-oswald",
@@ -14,7 +16,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${oswald.variable} antialiased`}>{children}</body>
+      <body className={`${oswald.variable} antialiased`}>
+        <ToastProvider>
+          <AuthProvider>{children}</AuthProvider>
+        </ToastProvider>
+      </body>
     </html>
   );
 }

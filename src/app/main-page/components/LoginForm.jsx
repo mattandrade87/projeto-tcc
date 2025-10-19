@@ -5,12 +5,21 @@ import InputField from "./InputField";
 import PasswordInput from "./PasswordInput";
 import Button from "./Button";
 import LinkText from "./LinkText";
+import { AuthAPI, AuthStorage } from "@/services/api";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/context/ToastContext.jsx";
+import Loader from "@/app/ui/Loader.jsx";
+import { useAuth } from "@/context/AuthContext.jsx";
 
 export default function LoginForm() {
   const [formData, setFormData] = useState({
     id: "",
     password: "",
   });
+  const [submitting, setSubmitting] = useState(false);
+  const router = useRouter();
+  const toast = useToast();
+  const { setRole } = useAuth();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -20,10 +29,28 @@ export default function LoginForm() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Dados do formulário:", formData);
-    // Aqui futuramente será feita a chamada para a API
+    setSubmitting(true);
+    try {
+      const resp = await AuthAPI.login({
+        id: formData.id,
+        password: formData.password,
+      });
+      // Expecting resp to have token and role
+      const token = resp?.token || resp?.accessToken || resp?.data?.token;
+      const role = resp?.role || resp?.data?.role || "USER";
+      if (!token) throw new Error("Credenciais inválidas");
+      AuthStorage.tokenStore.set(token);
+      AuthStorage.roleStore.set(role);
+      setRole(role);
+      toast.show("Login realizado com sucesso!", "success");
+      router.replace(role === "ADMIN" ? "/admin" : "/home");
+    } catch (err) {
+      toast.show(err?.message || "Falha no login", "error");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleForgotPassword = (e) => {
@@ -53,9 +80,15 @@ export default function LoginForm() {
       </div>
 
       <div className="mt-6 w-full">
-        <Button type="submit" href="/home" className="w-full">
-          Entrar
-        </Button>
+        <button
+          type="submit"
+          disabled={submitting}
+          className={`block bg-indigo-500 w-full hover:bg-indigo-600 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] focus:ring-4 focus:ring-blue-300 outline-none text-center px-6 py-3 ${
+            submitting ? "opacity-70 cursor-not-allowed" : ""
+          }`}
+        >
+          {submitting ? <Loader label="Entrando..." /> : "Entrar"}
+        </button>
       </div>
 
       <div className="mt-4 text-center">

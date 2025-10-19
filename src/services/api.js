@@ -1,0 +1,178 @@
+// Centralized API service using axios
+import axios from "axios";
+
+// ✅ Lê apenas o BASE_URL do ambiente
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || process.env.BASE_URL || "";
+
+// Token e role stores
+const tokenStore = {
+  get: () =>
+    typeof window !== "undefined" ? localStorage.getItem("auth_token") : null,
+  set: (t) =>
+    typeof window !== "undefined" &&
+    localStorage.setItem("auth_token", t || ""),
+  clear: () =>
+    typeof window !== "undefined" && localStorage.removeItem("auth_token"),
+};
+
+const roleStore = {
+  get: () =>
+    typeof window !== "undefined" ? localStorage.getItem("auth_role") : null,
+  set: (r) =>
+    typeof window !== "undefined" && localStorage.setItem("auth_role", r || ""),
+  clear: () =>
+    typeof window !== "undefined" && localStorage.removeItem("auth_role"),
+};
+
+// ✅ Cria o cliente Axios principal
+export const apiClient = axios.create({
+  baseURL: BASE_URL, // Ex: https://pi-contrucaocivil.onrender.com
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+// ✅ Intercepta e injeta o token JWT se existir
+apiClient.interceptors.request.use((config) => {
+  const token = tokenStore.get();
+  if (token) {
+    config.headers = config.headers || {};
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+apiClient.interceptors.response.use(
+  (res) => res,
+  (err) => {
+    const message =
+      err?.response?.data?.message || err?.message || "Erro desconhecido";
+    return Promise.reject({ ...err, message });
+  }
+);
+
+// ✅ APIs
+export const AuthAPI = {
+  login: async (payload) => {
+    const { data } = await apiClient.post("/public/auth/login", payload);
+    return data;
+  },
+  recoverPassword: async (payload) => {
+    const { data } = await apiClient.post(
+      "/public/auth/recover-password",
+      payload
+    );
+    return data;
+  },
+  updatePassword: async (payload) => {
+    const { data } = await apiClient.patch(
+      "/common/auth/update-password",
+      payload
+    );
+    return data;
+  },
+  registerAdmin: async (payload) => {
+    const { data } = await apiClient.post(
+      "/admin/auth/register/new-admin",
+      payload
+    );
+    return data;
+  },
+  registerUser: async (payload) => {
+    const { data } = await apiClient.post(
+      "/admin/auth/register/new-user",
+      payload
+    );
+    return data;
+  },
+};
+
+export const UserAPI = {
+  getMe: async () => {
+    const { data } = await apiClient.get("/common/user");
+    return data;
+  },
+  updateMe: async (payload) => {
+    const { data } = await apiClient.patch("/common/user", payload);
+    return data;
+  },
+};
+
+export const AdminAPI = {
+  listUsers: async () => {
+    const { data } = await apiClient.get("/admin/user/get-all");
+    return data;
+  },
+  getUserById: async (id) => {
+    const { data } = await apiClient.get(`/admin/user/${id}`);
+    return data;
+  },
+  updateUserById: async (id, payload) => {
+    const { data } = await apiClient.patch(`/admin/user/${id}`, payload);
+    return data;
+  },
+};
+
+export const ClockingAPI = {
+  getToday: async () => {
+    const { data } = await apiClient.get("/common/clocking/today");
+    return data;
+  },
+  getHistory: async () => {
+    const { data } = await apiClient.get("/common/clocking/history");
+    return data;
+  },
+  startWork: async () => {
+    const { data } = await apiClient.post("/common/clocking/punch/start-work");
+    return data;
+  },
+  startLunch: async () => {
+    const { data } = await apiClient.post("/common/clocking/punch/start-lunch");
+    return data;
+  },
+  endLunch: async () => {
+    const { data } = await apiClient.post("/common/clocking/punch/end-lunch");
+    return data;
+  },
+  endWork: async () => {
+    const { data } = await apiClient.post("/common/clocking/punch/end-work");
+    return data;
+  },
+  getById: async (id) => {
+    const { data } = await apiClient.get(`/admin/clocking/${id}`);
+    return data;
+  },
+  getByUser: async (userId) => {
+    const { data } = await apiClient.get(`/admin/clocking/user/${userId}`);
+    return data;
+  },
+  getByStatus: async (status) => {
+    const { data } = await apiClient.get(`/admin/clocking/status`, {
+      params: { name: status },
+    });
+    return data;
+  },
+  reject: async (id) => {
+    const { data } = await apiClient.post(`/admin/clocking/reject/${id}`);
+    return data;
+  },
+  approve: async (id) => {
+    const { data } = await apiClient.post(`/admin/clocking/approve/${id}`);
+    return data;
+  },
+};
+
+// Armazena tokens/roles
+export const AuthStorage = { tokenStore, roleStore };
+
+// Exporta tudo
+const api = {
+  client: apiClient,
+  AuthAPI,
+  UserAPI,
+  AdminAPI,
+  ClockingAPI,
+  AuthStorage,
+};
+
+export default api;
