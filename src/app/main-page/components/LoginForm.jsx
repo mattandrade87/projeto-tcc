@@ -37,9 +37,19 @@ export default function LoginForm() {
         email: formData.email,
         password: formData.password,
       });
-      // Expecting resp to have token and role
-      const token = resp?.token || resp?.accessToken || resp?.data?.token;
-      const role = resp?.role || resp?.data?.role || "USER";
+      // Suporta formatos diferentes (backend próprio e Supabase)
+      const token =
+        resp?.token ||
+        resp?.accessToken ||
+        resp?.access_token ||
+        resp?.data?.token ||
+        resp?.data?.access_token;
+      const role =
+        resp?.role ||
+        resp?.data?.role ||
+        resp?.user?.user_metadata?.role ||
+        resp?.user?.app_metadata?.role ||
+        "USER";
       if (!token) throw new Error("Credenciais inválidas");
       AuthStorage.tokenStore.set(token);
       AuthStorage.roleStore.set(role);

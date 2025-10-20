@@ -41,7 +41,6 @@ export default function PasswordInput({
           className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700 transition-colors duration-200"
         >
           {showPassword ? (
-            // Ícone de olho fechado (esconder senha)
             <svg
               className="h-5 w-5"
               fill="none"
@@ -56,7 +55,6 @@ export default function PasswordInput({
               />
             </svg>
           ) : (
-            // Ícone de olho aberto (mostrar senha)
             <svg
               className="h-5 w-5"
               fill="none"

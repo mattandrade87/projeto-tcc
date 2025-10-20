@@ -2,7 +2,7 @@
 import axios from "axios";
 
 // ✅ Lê apenas o BASE_URL do ambiente
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || process.env.BASE_URL || "";
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "";
 
 // Token e role stores
 const tokenStore = {
@@ -54,8 +54,23 @@ apiClient.interceptors.response.use(
 // ✅ APIs
 export const AuthAPI = {
   login: async (payload) => {
-    const { data } = await apiClient.post("/public/auth/login", payload);
-    return data;
+    console.log("Payload recebido:", payload); // Verifica email e password recebidos
+
+    // Envio para o Supabase
+    const supabaseResp = await axios.post(
+      "https://pi-contrucaocivil.onrender.com/public/auth/login",
+      { email: payload.email, password: payload.password },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          apikey: process.env.SUPABASE_SERVICE_KEY,
+        },
+      }
+    );
+
+    console.log("Resposta do Supabase:", supabaseResp.data); // Verifica resposta do Supabase
+
+    return supabaseResp.data;
   },
   recoverPassword: async (payload) => {
     const { data } = await apiClient.post(

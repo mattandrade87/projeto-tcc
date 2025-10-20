@@ -42,7 +42,7 @@ export default function Home() {
 
         <div className="max-w-md mx-auto mt-8 gap-2 flex flex-col">
           <Button href="/bater-ponto">Bater Ponto</Button>
-          <Button href="/servicos">Serviços</Button>
+          <Button href="/perfil">Perfil</Button>
           <Button href="/relatorios">Relatórios</Button>
           <div className="text-center ">
             <button
