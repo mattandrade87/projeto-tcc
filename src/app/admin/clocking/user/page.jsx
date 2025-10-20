@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { ClockingAPI } from "@/services/api";
-import Loader from "@/app/ui/Loader.jsx";
+import Loader from "@/components/ui/Loader";
 import { useToast } from "@/context/ToastContext.jsx";
 import { Title } from "@/app/main-page/components";
 

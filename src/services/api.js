@@ -137,20 +137,29 @@ export const ClockingAPI = {
     const { data } = await apiClient.get("/common/clocking/history");
     return data;
   },
-  startWork: async () => {
-    const { data } = await apiClient.post("/common/clocking/punch/start-work");
+  startWork: async (time) => {
+    const { data } = await apiClient.post("/common/clocking/punch/start-work", {
+      time,
+    });
     return data;
   },
-  startLunch: async () => {
-    const { data } = await apiClient.post("/common/clocking/punch/start-lunch");
+  startLunch: async (time) => {
+    const { data } = await apiClient.post(
+      "/common/clocking/punch/start-lunch",
+      { time }
+    );
     return data;
   },
-  endLunch: async () => {
-    const { data } = await apiClient.post("/common/clocking/punch/end-lunch");
+  endLunch: async (time) => {
+    const { data } = await apiClient.post("/common/clocking/punch/end-lunch", {
+      time,
+    });
     return data;
   },
-  endWork: async () => {
-    const { data } = await apiClient.post("/common/clocking/punch/end-work");
+  endWork: async (time) => {
+    const { data } = await apiClient.post("/common/clocking/punch/end-work", {
+      time,
+    });
     return data;
   },
   getById: async (id) => {

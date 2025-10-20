@@ -1,9 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
 import { ClockingAPI } from "@/services/api";
-import Loader from "@/app/ui/Loader.jsx";
+import Loader from "@/components/ui/Loader";
 import { useToast } from "@/context/ToastContext.jsx";
 import { Title } from "@/app/main-page/components";
+import { BackButton } from "@/components/ui";
 
 export default function BaterPontoPage() {
   const [today, setToday] = useState(null);
@@ -44,6 +45,7 @@ export default function BaterPontoPage() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center px-4 py-8">
       <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-2xl">
         <div className="mb-4 text-center">
+          <BackButton />
           <Title>Bater Ponto</Title>
         </div>
         {loading ? (

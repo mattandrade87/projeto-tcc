@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { ClockingAPI } from "@/services/api";
 import { useToast } from "@/context/ToastContext.jsx";
 import { useParams } from "next/navigation";
-import Loader from "@/app/ui/Loader.jsx";
+import Loader from "@/components/ui/Loader";
 import { Title } from "@/app/main-page/components";
 
 export default function ClockingByIdPage() {

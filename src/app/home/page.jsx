@@ -2,7 +2,7 @@
 import { Button, Title } from "../main-page/components";
 import { useEffect, useState } from "react";
 import { UserAPI } from "@/services/api";
-import Loader from "@/app/ui/Loader.jsx";
+import Loader from "@/components/ui/Loader";
 import { useAuth } from "@/context/AuthContext.jsx";
 
 export default function Home() {

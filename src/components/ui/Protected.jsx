@@ -5,7 +5,7 @@ import Loader from "./Loader.jsx";
 
 export function RequireAuth({ children }) {
   const { user } = useAuth();
-  if (user === undefined) return <Loader />; // Should not happen; keeping simple
+  if (user === undefined) return <Loader />;
   return <>{children}</>;
 }
 

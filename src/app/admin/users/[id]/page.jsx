@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { AdminAPI } from "@/services/api";
-import Loader from "@/app/ui/Loader.jsx";
+import Loader from "@/components/ui/Loader";
 import { useToast } from "@/context/ToastContext.jsx";
 import { useParams, useRouter } from "next/navigation";
 import { Title } from "@/app/main-page/components";

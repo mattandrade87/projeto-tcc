@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { AuthAPI } from "@/services/api";
 import { useToast } from "@/context/ToastContext.jsx";
-import Loader from "@/app/ui/Loader.jsx";
+import Loader from "@/components/ui/Loader";
 import { Title } from "@/app/main-page/components";
 
 export default function UpdatePasswordPage() {

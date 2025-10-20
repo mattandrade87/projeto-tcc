@@ -8,7 +8,7 @@ import LinkText from "./LinkText";
 import { AuthAPI, AuthStorage } from "@/services/api";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/context/ToastContext.jsx";
-import Loader from "@/app/ui/Loader.jsx";
+import Loader from "@/components/ui/Loader";
 import { useAuth } from "@/context/AuthContext.jsx";
 
 export default function LoginForm() {
@@ -63,12 +63,6 @@ export default function LoginForm() {
     }
   };
 
-  const handleForgotPassword = (e) => {
-    e.preventDefault();
-    console.log("Esqueceu a senha clicado");
-    // Aqui futuramente será implementada a lógica de recuperação de senha
-  };
-
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto">
       <div className="space-y-4">
@@ -102,7 +96,7 @@ export default function LoginForm() {
       </div>
 
       <div className="mt-4 text-center">
-        <LinkText onClick={handleForgotPassword}>Esqueceu sua senha?</LinkText>
+        <LinkText href="/recover-password">Esqueceu sua senha?</LinkText>
       </div>
     </form>
   );
