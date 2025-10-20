@@ -13,7 +13,7 @@ import { useAuth } from "@/context/AuthContext.jsx";
 
 export default function LoginForm() {
   const [formData, setFormData] = useState({
-    id: "",
+    email: "",
     password: "",
   });
   const [submitting, setSubmitting] = useState(false);
@@ -34,7 +34,7 @@ export default function LoginForm() {
     setSubmitting(true);
     try {
       const resp = await AuthAPI.login({
-        id: formData.id,
+        email: formData.email,
         password: formData.password,
       });
       // Expecting resp to have token and role
@@ -63,10 +63,10 @@ export default function LoginForm() {
     <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto">
       <div className="space-y-4">
         <InputField
-          label="ID"
-          name="id"
-          placeholder="Digite seu ID"
-          value={formData.id}
+          label="E-mail"
+          name="email"
+          placeholder="Digite seu e-mail"
+          value={formData.email}
           onChange={handleInputChange}
         />
 
