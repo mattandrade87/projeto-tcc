@@ -37,7 +37,7 @@ export default function LoginForm() {
         email: formData.email,
         password: formData.password,
       });
-      // Suporta formatos diferentes (backend próprio e Supabase)
+
       const token =
         resp?.token ||
         resp?.accessToken ||

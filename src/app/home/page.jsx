@@ -10,6 +10,8 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const { signOut } = useAuth();
 
+  console.log(profile);
+
   useEffect(() => {
     (async () => {
       try {
@@ -44,10 +46,11 @@ export default function Home() {
           <Button href="/bater-ponto">Bater Ponto</Button>
           <Button href="/perfil">Perfil</Button>
           <Button href="/relatorios">Relatórios</Button>
+          {profile?.role === "admin" && <Button href="/admin">Admin</Button>}
           <div className="text-center ">
             <button
               onClick={signOut}
-              className="bg-[#ff2323] cursor-pointer hover:bg-red-600 p-1 rounded text-white px-6"
+              className="bg-red-500 cursor-pointer hover:bg-red-600 p-1 rounded text-white px-6"
             >
               Sair
             </button>

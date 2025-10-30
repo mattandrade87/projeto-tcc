@@ -1,11 +1,12 @@
-import { Oswald } from "next/font/google";
+import { Roboto } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext.jsx";
 import { ToastProvider } from "@/context/ToastContext.jsx";
 
-const oswald = Oswald({
-  variable: "--font-oswald",
+const roboto = Roboto({
+  variable: "--font-roboto",
   subsets: ["latin"],
+  weight: ["400", "500", "700"], // você pode ajustar os pesos conforme precisar
 });
 
 export const metadata = {
@@ -16,7 +17,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${oswald.variable} antialiased`}>
+      <body className={`${roboto.variable} antialiased`}>
         <ToastProvider>
           <AuthProvider>{children}</AuthProvider>
         </ToastProvider>

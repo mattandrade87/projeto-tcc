@@ -15,8 +15,7 @@ export default function AdminHome() {
         <div className="mt-6 space-y-3">
           <Nav href="/home">Home</Nav>
           <Nav href="/admin/users">Usuários</Nav>
-          <Nav href="/admin/clocking/status">Pontos por Status</Nav>
-          <Nav href="/admin/clocking/user">Pontos por Usuário</Nav>
+          <Nav href="/admin/clocking/search">Consultar Pontos</Nav>
         </div>
       </div>
     </div>
