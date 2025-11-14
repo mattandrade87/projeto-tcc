@@ -80,10 +80,9 @@ export const AuthAPI = {
     return data;
   },
   updatePassword: async (payload) => {
-    const { data } = await apiClient.patch(
-      "/common/auth/update-password",
-      payload
-    );
+    const { data } = await apiClient.patch("/common/auth/update-password", {
+      password: payload.password,
+    });
     return data;
   },
   registerAdmin: async (payload) => {
@@ -99,6 +98,41 @@ export const AuthAPI = {
       payload
     );
     return data;
+  },
+  // Supabase Auth direto
+  supabaseSignup: async (payload) => {
+    const resp = await axios.post(
+      "https://ssfurhkqaoyuaqwzsvnx.supabase.co/auth/v1/signup",
+      {
+        email: payload.email,
+        password: payload.password,
+        data: {
+          first_name: payload.firstName || "",
+          last_name: payload.lastName || "",
+          display_name: payload.displayName || "",
+          role: payload.role || "USER",
+        },
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          apikey: process.env.SUPABASE_SERVICE_KEY,
+        },
+      }
+    );
+    return resp.data;
+  },
+  supabaseAdminUsers: async () => {
+    const resp = await axios.get(
+      "https://ssfurhkqaoyuaqwzsvnx.supabase.co/auth/v1/admin/users",
+      {
+        headers: {
+          "Content-Type": "application/json",
+          apikey: process.env.SUPABASE_SERVICE_KEY,
+        },
+      }
+    );
+    return resp.data;
   },
 };
 

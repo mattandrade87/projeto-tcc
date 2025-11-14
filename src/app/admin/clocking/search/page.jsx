@@ -114,8 +114,18 @@ export default function ClockingSearchPage() {
                 // Auto-select user when typing
                 const found = users.find(
                   (u) =>
-                    u.name &&
-                    u.name.toLowerCase().includes(e.target.value.toLowerCase())
+                    (u.displayName &&
+                      u.displayName
+                        .toLowerCase()
+                        .includes(e.target.value.toLowerCase())) ||
+                    (u.firstName &&
+                      u.firstName
+                        .toLowerCase()
+                        .includes(e.target.value.toLowerCase())) ||
+                    (u.name &&
+                      u.name
+                        .toLowerCase()
+                        .includes(e.target.value.toLowerCase()))
                 );
                 setSelectedUserId(found ? found.id : "");
               }}
@@ -125,7 +135,10 @@ export default function ClockingSearchPage() {
             />
             <datalist id="user-list">
               {users.map((u) => (
-                <option key={u.id} value={u.name} />
+                <option
+                  key={u.id}
+                  value={u.displayName || u.firstName || u.name}
+                />
               ))}
             </datalist>
           </div>
@@ -183,21 +196,29 @@ export default function ClockingSearchPage() {
                   items.map((r) => (
                     <tr key={r.id} className="border-t hover:bg-gray-50">
                       <Td>{r.id}</Td>
-                      <Td>{r.user?.name || r.userName || r.userId}</Td>
+                      <Td>
+                        {r.user?.displayName ||
+                          `${r.user?.firstName || ''} ${r.user?.lastName || ''}`.trim() ||
+                          r.user?.name ||
+                          r.userName ||
+                          `ID: ${r.userId}`}
+                      </Td>
                       <Td>
                         {r.date
                           ? new Date(r.date).toLocaleDateString("pt-BR")
-                          : "--"}
+                          : r.startWork
+                          ? new Date(r.startWork).toLocaleDateString("pt-BR")
+                          : "--/--/----"}
                       </Td>
                       <Td>
                         {r.startWork
                           ? new Date(r.startWork).toLocaleTimeString("pt-BR")
-                          : "--"}
+                          : "--:--:--"}
                       </Td>
                       <Td>
                         {r.endWork
                           ? new Date(r.endWork).toLocaleTimeString("pt-BR")
-                          : "--"}
+                          : "--:--:--"}
                       </Td>
                       <Td>
                         <span

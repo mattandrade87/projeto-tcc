@@ -34,9 +34,10 @@ export default function UserDetailsPage() {
     setSaving(true);
     try {
       await AdminAPI.updateUserById(id, {
-        name: user.name,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        displayName: user.displayName,
         email: user.email,
-        role: user.role,
       });
       toast.show("Usuário atualizado", "success");
       router.back();
@@ -61,11 +62,27 @@ export default function UserDetailsPage() {
           <Title>Editar Usuário</Title>
         </div>
         <form onSubmit={onSubmit} className="space-y-4">
-          <Field label="Nome">
+          <Field label="Primeiro Nome">
             <input
               className="w-full px-4 py-3 border rounded-lg"
-              value={user?.name || ""}
-              onChange={(e) => setUser({ ...user, name: e.target.value })}
+              value={user?.firstName || ""}
+              onChange={(e) => setUser({ ...user, firstName: e.target.value })}
+            />
+          </Field>
+          <Field label="Sobrenome">
+            <input
+              className="w-full px-4 py-3 border rounded-lg"
+              value={user?.lastName || ""}
+              onChange={(e) => setUser({ ...user, lastName: e.target.value })}
+            />
+          </Field>
+          <Field label="Nome de Exibição">
+            <input
+              className="w-full px-4 py-3 border rounded-lg"
+              value={user?.displayName || ""}
+              onChange={(e) =>
+                setUser({ ...user, displayName: e.target.value })
+              }
             />
           </Field>
           <Field label="Email">
@@ -75,16 +92,6 @@ export default function UserDetailsPage() {
               value={user?.email || ""}
               onChange={(e) => setUser({ ...user, email: e.target.value })}
             />
-          </Field>
-          <Field label="Papel">
-            <select
-              className="w-full px-4 py-3 border rounded-lg"
-              value={user?.role || "USER"}
-              onChange={(e) => setUser({ ...user, role: e.target.value })}
-            >
-              <option value="USER">USER</option>
-              <option value="ADMIN">ADMIN</option>
-            </select>
           </Field>
           <button
             type="submit"

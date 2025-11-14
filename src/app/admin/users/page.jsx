@@ -50,9 +50,24 @@ export default function UsersListPage() {
                 {items.map((u) => (
                   <tr key={u.id} className="border-t">
                     <Td>{u.id}</Td>
-                    <Td>{u.name}</Td>
+                    <Td>
+                      {u.displayName || 
+                       `${u.firstName || ''} ${u.lastName || ''}`.trim() ||
+                       u.name ||
+                       u.email}
+                    </Td>
                     <Td>{u.email}</Td>
-                    <Td>{u.role}</Td>
+                    <Td>
+                      <span
+                        className={`px-2 py-1 rounded text-xs font-semibold ${
+                          u.role === "ADMIN"
+                            ? "bg-purple-100 text-purple-800"
+                            : "bg-blue-100 text-blue-800"
+                        }`}
+                      >
+                        {u.role || "USER"}
+                      </span>
+                    </Td>
                     <Td>
                       <Link
                         href={`/admin/users/${u.id}`}

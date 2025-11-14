@@ -6,24 +6,22 @@ import Loader from "@/components/ui/Loader";
 import { Title } from "@/app/main-page/components";
 
 export default function UpdatePasswordPage() {
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
+  const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [loading, setLoading] = useState(false);
   const toast = useToast();
 
   const submit = async (e) => {
     e.preventDefault();
-    if (newPassword !== confirm) {
+    if (password !== confirm) {
       toast.show("Senhas não conferem", "warning");
       return;
     }
     setLoading(true);
     try {
-      await AuthAPI.updatePassword({ currentPassword, newPassword });
+      await AuthAPI.updatePassword({ password });
       toast.show("Senha atualizada", "success");
-      setCurrentPassword("");
-      setNewPassword("");
+      setPassword("");
       setConfirm("");
     } catch (e) {
       toast.show(e?.message || "Erro ao atualizar senha", "error");
@@ -39,19 +37,11 @@ export default function UpdatePasswordPage() {
           <Title>Alterar Senha</Title>
         </div>
         <form onSubmit={submit} className="space-y-4">
-          <Field label="Senha atual">
-            <input
-              type="password"
-              value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
-              className="w-full px-4 py-3 border rounded-lg"
-            />
-          </Field>
           <Field label="Nova senha">
             <input
               type="password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="w-full px-4 py-3 border rounded-lg"
             />
           </Field>

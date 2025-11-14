@@ -31,7 +31,10 @@ export default function BaterPontoPage() {
   const act = async (action) => {
     setActing(true);
     try {
-      await action();
+      // Captura o horário atual no formato HH:MM:SS
+      const now = new Date();
+      const time = now.toTimeString().split(" ")[0]; // "HH:MM:SS"
+      await action(time);
       toast.show("Registro atualizado", "success");
       await load();
     } catch (e) {
@@ -94,7 +97,7 @@ function Info({ label, value }) {
     <div className="p-4 border rounded-lg">
       <div className="text-sm text-gray-500">{label}</div>
       <div className="font-semibold">
-        {value ? new Date(value).toLocaleTimeString() : "--:--"}
+        {value ? new Date(value).toLocaleTimeString("pt-BR") : "--:--:--"}
       </div>
     </div>
   );

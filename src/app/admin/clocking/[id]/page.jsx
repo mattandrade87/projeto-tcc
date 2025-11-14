@@ -39,44 +39,69 @@ export default function ClockingByIdPage() {
           </div>
         ) : (
           <div className="space-y-2">
-            <Row label="Usuário" value={data?.user?.name || data?.userId} />
+            <Row
+              label="Usuário"
+              value={
+                data?.user?.displayName ||
+                data?.user?.firstName ||
+                data?.user?.name ||
+                `ID: ${data?.userId}`
+              }
+            />
             <Row
               label="Data"
-              value={data?.date ? new Date(data.date).toLocaleDateString() : ""}
+              value={
+                data?.date
+                  ? new Date(data.date).toLocaleDateString("pt-BR")
+                  : data?.startWork
+                  ? new Date(data.startWork).toLocaleDateString("pt-BR")
+                  : "--/--/----"
+              }
             />
             <Row
               label="Início"
               value={
                 data?.startWork
-                  ? new Date(data.startWork).toLocaleTimeString()
-                  : "--"
+                  ? new Date(data.startWork).toLocaleTimeString("pt-BR")
+                  : "--:--:--"
               }
             />
             <Row
               label="Início almoço"
               value={
                 data?.startLunch
-                  ? new Date(data.startLunch).toLocaleTimeString()
-                  : "--"
+                  ? new Date(data.startLunch).toLocaleTimeString("pt-BR")
+                  : "--:--:--"
               }
             />
             <Row
               label="Fim almoço"
               value={
                 data?.endLunch
-                  ? new Date(data.endLunch).toLocaleTimeString()
-                  : "--"
+                  ? new Date(data.endLunch).toLocaleTimeString("pt-BR")
+                  : "--:--:--"
               }
             />
             <Row
               label="Fim"
               value={
                 data?.endWork
-                  ? new Date(data.endWork).toLocaleTimeString()
-                  : "--"
+                  ? new Date(data.endWork).toLocaleTimeString("pt-BR")
+                  : "--:--:--"
               }
             />
-            <Row label="Status" value={data?.status} />
+            <Row
+              label="Status"
+              value={
+                data?.status === "PENDING"
+                  ? "PENDENTE"
+                  : data?.status === "APPROVED"
+                  ? "APROVADO"
+                  : data?.status === "REJECTED"
+                  ? "REJEITADO"
+                  : data?.status || "--"
+              }
+            />
           </div>
         )}
       </div>

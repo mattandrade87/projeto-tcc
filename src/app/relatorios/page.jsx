@@ -60,7 +60,27 @@ export default function Relatorios() {
                     <Td>{formatTime(row.startLunch)}</Td>
                     <Td>{formatTime(row.endLunch)}</Td>
                     <Td>{formatTime(row.endWork)}</Td>
-                    <Td>{row.status || ""}</Td>
+                    <Td>
+                      <span
+                        className={`px-2 py-1 rounded text-xs font-semibold ${
+                          row.status === "APPROVED"
+                            ? "bg-green-100 text-green-800"
+                            : row.status === "REJECTED"
+                            ? "bg-red-100 text-red-800"
+                            : row.status === "PENDING"
+                            ? "bg-yellow-100 text-yellow-800"
+                            : ""
+                        }`}
+                      >
+                        {row.status === "PENDING"
+                          ? "PENDENTE"
+                          : row.status === "APPROVED"
+                          ? "APROVADO"
+                          : row.status === "REJECTED"
+                          ? "REJEITADO"
+                          : row.status || "--"}
+                      </span>
+                    </Td>
                   </tr>
                 ))}
               </tbody>
@@ -84,14 +104,14 @@ function Td({ children }) {
 }
 function formatTime(v) {
   try {
-    return v ? new Date(v).toLocaleTimeString() : "--:--";
+    return v ? new Date(v).toLocaleTimeString("pt-BR") : "--:--:--";
   } catch {
-    return "--:--";
+    return "--:--:--";
   }
 }
 function formatDate(v) {
   try {
-    return v ? new Date(v).toLocaleDateString() : "--/--/----";
+    return v ? new Date(v).toLocaleDateString("pt-BR") : "--/--/----";
   } catch {
     return "--/--/----";
   }

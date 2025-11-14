@@ -36,8 +36,17 @@ export default function Home() {
             </div>
           ) : (
             <>
-              <p className="text-xl">Bem-vindo {profile?.name || "Usuário"}!</p>
-              <p className="text-xl">{profile?.role || ""}</p>
+              <p className="text-xl">
+                Bem-vindo{" "}
+                {profile?.displayName ||
+                  `${profile?.firstName || ''} ${profile?.lastName || ''}`.trim() ||
+                  profile?.name ||
+                  "Usuário"}
+                !
+              </p>
+              <p className="text-lg text-gray-600 mt-2">
+                {profile?.role === "ADMIN" ? "Administrador" : "Usuário"}
+              </p>
             </>
           )}
         </div>
@@ -46,7 +55,7 @@ export default function Home() {
           <Button href="/bater-ponto">Bater Ponto</Button>
           <Button href="/perfil">Perfil</Button>
           <Button href="/relatorios">Relatórios</Button>
-          {profile?.role === "admin" && <Button href="/admin">Admin</Button>}
+          {profile?.role === "ADMIN" && <Button href="/admin">Admin</Button>}
           <div className="text-center ">
             <button
               onClick={signOut}

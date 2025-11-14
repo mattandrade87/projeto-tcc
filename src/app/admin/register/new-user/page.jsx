@@ -6,7 +6,13 @@ import Loader from "@/components/ui/Loader";
 import { Title } from "@/app/main-page/components";
 
 export default function NewUserPage() {
-  const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const [form, setForm] = useState({
+    firstName: "",
+    lastName: "",
+    displayName: "",
+    email: "",
+    password: "",
+  });
   const [saving, setSaving] = useState(false);
   const toast = useToast();
 
@@ -16,7 +22,13 @@ export default function NewUserPage() {
     try {
       await AuthAPI.registerUser(form);
       toast.show("Usuário criado", "success");
-      setForm({ name: "", email: "", password: "" });
+      setForm({
+        firstName: "",
+        lastName: "",
+        displayName: "",
+        email: "",
+        password: "",
+      });
     } catch (e) {
       toast.show(e?.message || "Erro ao criar usuário", "error");
     } finally {
@@ -32,9 +44,19 @@ export default function NewUserPage() {
         </div>
         <form onSubmit={submit} className="space-y-4">
           <Input
-            label="Nome"
-            value={form.name}
-            onChange={(v) => setForm({ ...form, name: v })}
+            label="Primeiro Nome"
+            value={form.firstName}
+            onChange={(v) => setForm({ ...form, firstName: v })}
+          />
+          <Input
+            label="Sobrenome"
+            value={form.lastName}
+            onChange={(v) => setForm({ ...form, lastName: v })}
+          />
+          <Input
+            label="Nome de Exibição"
+            value={form.displayName}
+            onChange={(v) => setForm({ ...form, displayName: v })}
           />
           <Input
             type="email"

@@ -7,7 +7,12 @@ import { Title } from "@/app/main-page/components";
 import { BackButton } from "@/components/ui";
 
 export default function PerfilPage() {
-  const [form, setForm] = useState({ name: "", email: "" });
+  const [form, setForm] = useState({
+    firstName: "",
+    lastName: "",
+    displayName: "",
+    email: "",
+  });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const toast = useToast();
@@ -16,7 +21,12 @@ export default function PerfilPage() {
     (async () => {
       try {
         const me = await UserAPI.getMe();
-        setForm({ name: me?.name || "", email: me?.email || "" });
+        setForm({
+          firstName: me?.firstName || "",
+          lastName: me?.lastName || "",
+          displayName: me?.displayName || "",
+          email: me?.email || "",
+        });
       } catch (e) {
         toast.show(e?.message || "Erro ao carregar perfil", "error");
       } finally {
@@ -53,11 +63,27 @@ export default function PerfilPage() {
           <Title>Meu Perfil</Title>
         </div>
         <form onSubmit={submit} className="space-y-4">
-          <Field label="Nome">
+          <Field label="Primeiro Nome">
             <input
               className="w-full px-4 py-3 border rounded-lg"
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
+              value={form.firstName}
+              onChange={(e) => setForm({ ...form, firstName: e.target.value })}
+            />
+          </Field>
+          <Field label="Sobrenome">
+            <input
+              className="w-full px-4 py-3 border rounded-lg"
+              value={form.lastName}
+              onChange={(e) => setForm({ ...form, lastName: e.target.value })}
+            />
+          </Field>
+          <Field label="Nome de Exibição">
+            <input
+              className="w-full px-4 py-3 border rounded-lg"
+              value={form.displayName}
+              onChange={(e) =>
+                setForm({ ...form, displayName: e.target.value })
+              }
             />
           </Field>
           <Field label="Email">
