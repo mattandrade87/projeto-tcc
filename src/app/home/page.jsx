@@ -39,7 +39,9 @@ export default function Home() {
               <p className="text-xl">
                 Bem-vindo{" "}
                 {profile?.displayName ||
-                  `${profile?.firstName || ''} ${profile?.lastName || ''}`.trim() ||
+                  `${profile?.firstName || ""} ${
+                    profile?.lastName || ""
+                  }`.trim() ||
                   profile?.name ||
                   "Usuário"}
                 !

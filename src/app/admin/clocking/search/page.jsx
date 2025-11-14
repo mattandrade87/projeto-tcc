@@ -198,7 +198,9 @@ export default function ClockingSearchPage() {
                       <Td>{r.id}</Td>
                       <Td>
                         {r.user?.displayName ||
-                          `${r.user?.firstName || ''} ${r.user?.lastName || ''}`.trim() ||
+                          `${r.user?.firstName || ""} ${
+                            r.user?.lastName || ""
+                          }`.trim() ||
                           r.user?.name ||
                           r.userName ||
                           `ID: ${r.userId}`}

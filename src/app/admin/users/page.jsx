@@ -51,10 +51,10 @@ export default function UsersListPage() {
                   <tr key={u.id} className="border-t">
                     <Td>{u.id}</Td>
                     <Td>
-                      {u.displayName || 
-                       `${u.firstName || ''} ${u.lastName || ''}`.trim() ||
-                       u.name ||
-                       u.email}
+                      {u.displayName ||
+                        `${u.firstName || ""} ${u.lastName || ""}`.trim() ||
+                        u.name ||
+                        u.email}
                     </Td>
                     <Td>{u.email}</Td>
                     <Td>
