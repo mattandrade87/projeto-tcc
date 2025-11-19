@@ -5,6 +5,7 @@ import Loader from "@/components/ui/Loader";
 import { useToast } from "@/context/ToastContext.jsx";
 import { useParams, useRouter } from "next/navigation";
 import { Title } from "@/app/main-page/components";
+import { BackButton } from "@/components/ui";
 
 export default function UserDetailsPage() {
   const params = useParams();
@@ -58,6 +59,7 @@ export default function UserDetailsPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center px-4 py-8">
       <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-xl">
+        <BackButton />
         <div className="mb-4 text-center">
           <Title>Editar Usuário</Title>
         </div>

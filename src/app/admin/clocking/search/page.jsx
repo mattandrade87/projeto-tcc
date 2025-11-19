@@ -18,6 +18,7 @@ function Td({ children }) {
   return <td className="px-4 py-2 text-sm">{children}</td>;
 }
 
+
 export default function ClockingSearchPage() {
   const [status, setStatus] = useState("");
   const [userName, setUserName] = useState("");
@@ -28,7 +29,7 @@ export default function ClockingSearchPage() {
   const [acting, setActing] = useState(false);
   const toast = useToast();
 
-  // Load all users for the dropdown
+  // Carrega usuários e registros pendentes ao entrar
   useEffect(() => {
     (async () => {
       try {
@@ -36,6 +37,17 @@ export default function ClockingSearchPage() {
         setUsers(Array.isArray(data) ? data : data?.items || []);
       } catch (e) {
         toast.show(e?.message || "Erro ao carregar usuários", "error");
+      }
+      // Busca registros pendentes ao entrar
+      setLoading(true);
+      try {
+        const pendentes = await ClockingAPI.getByStatus("PENDING");
+        setItems(Array.isArray(pendentes) ? pendentes : pendentes?.items || []);
+        setStatus("PENDING");
+      } catch (e) {
+        toast.show(e?.message || "Erro ao buscar pontos pendentes", "error");
+      } finally {
+        setLoading(false);
       }
     })();
   }, []);
@@ -53,18 +65,18 @@ export default function ClockingSearchPage() {
       let data = [];
 
       if (selectedUserId && status) {
-        // Filter by both user and status
+        // Filtra por usuário e status
         const byStatus = await ClockingAPI.getByStatus(status);
         const allItems = Array.isArray(byStatus)
           ? byStatus
           : byStatus?.items || [];
         data = allItems.filter((item) => item.userId === selectedUserId);
       } else if (selectedUserId) {
-        // Filter by user only
+        // Filtra por usuário
         const byUser = await ClockingAPI.getByUser(selectedUserId);
         data = Array.isArray(byUser) ? byUser : byUser?.items || [];
       } else if (status) {
-        // Filter by status only
+        // Filtra por status
         const byStatus = await ClockingAPI.getByStatus(status);
         data = Array.isArray(byStatus) ? byStatus : byStatus?.items || [];
       }
@@ -82,7 +94,7 @@ export default function ClockingSearchPage() {
     try {
       await fn(id);
       toast.show("Atualizado com sucesso", "success");
-      // Reload the search results
+      // Recarrega os registros filtrados atuais
       await search();
     } catch (e) {
       toast.show(e?.message || "Falha na operação", "error");
@@ -174,7 +186,6 @@ export default function ClockingSearchPage() {
             <table className="min-w-full border rounded-lg">
               <thead>
                 <tr className="bg-gray-100 text-left">
-                  <Th>ID</Th>
                   <Th>Usuário</Th>
                   <Th>Data</Th>
                   <Th>Início</Th>
@@ -194,34 +205,11 @@ export default function ClockingSearchPage() {
                   </tr>
                 ) : (
                   items.map((r) => (
-                    <tr key={r.id} className="border-t hover:bg-gray-50">
-                      <Td>{r.id}</Td>
-                      <Td>
-                        {r.user?.displayName ||
-                          `${r.user?.firstName || ""} ${
-                            r.user?.lastName || ""
-                          }`.trim() ||
-                          r.user?.name ||
-                          r.userName ||
-                          `ID: ${r.userId}`}
-                      </Td>
-                      <Td>
-                        {r.date
-                          ? new Date(r.date).toLocaleDateString("pt-BR")
-                          : r.startWork
-                          ? new Date(r.startWork).toLocaleDateString("pt-BR")
-                          : "--/--/----"}
-                      </Td>
-                      <Td>
-                        {r.startWork
-                          ? new Date(r.startWork).toLocaleTimeString("pt-BR")
-                          : "--:--:--"}
-                      </Td>
-                      <Td>
-                        {r.endWork
-                          ? new Date(r.endWork).toLocaleTimeString("pt-BR")
-                          : "--:--:--"}
-                      </Td>
+                    <tr key={r.clockingId || r.id} className="border-t hover:bg-gray-50">
+                      <Td>{r.userName || r.user?.displayName || r.user?.name || `ID: ${r.userId}`}</Td>
+                      <Td>{r.clockingDate ? new Date(r.clockingDate).toLocaleDateString("pt-BR") : "--/--/----"}</Td>
+                      <Td>{r.startWorkHour || r.startWork ? (r.startWorkHour ? r.startWorkHour : new Date(r.startWork).toLocaleTimeString("pt-BR")) : "--:--:--"}</Td>
+                      <Td>{r.endWorkHour || r.endWork ? (r.endWorkHour ? r.endWorkHour : new Date(r.endWork).toLocaleTimeString("pt-BR")) : "--:--:--"}</Td>
                       <Td>
                         <span
                           className={`px-2 py-1 rounded text-xs font-semibold ${
@@ -244,14 +232,14 @@ export default function ClockingSearchPage() {
                           <div className="flex gap-2">
                             <button
                               disabled={acting}
-                              onClick={() => act(ClockingAPI.approve, r.id)}
+                              onClick={() => act(ClockingAPI.approve, r.clockingId || r.id)}
                               className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 disabled:opacity-50 text-xs"
                             >
                               Aprovar
                             </button>
                             <button
                               disabled={acting}
-                              onClick={() => act(ClockingAPI.reject, r.id)}
+                              onClick={() => act(ClockingAPI.reject, r.clockingId || r.id)}
                               className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 disabled:opacity-50 text-xs"
                             >
                               Rejeitar

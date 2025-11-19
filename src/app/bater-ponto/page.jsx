@@ -58,10 +58,10 @@ export default function BaterPontoPage() {
         ) : (
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
-              <Info label="Início Trabalho" value={today?.startWork} />
-              <Info label="Início Almoço" value={today?.startLunch} />
-              <Info label="Fim Almoço" value={today?.endLunch} />
-              <Info label="Fim Expediente" value={today?.endWork} />
+              <Info label="Início Trabalho" value={today?.startWorkHour} />
+              <Info label="Início Almoço" value={today?.startLunchHour} />
+              <Info label="Fim Almoço" value={today?.endLunchHour} />
+              <Info label="Fim Expediente" value={today?.endWorkHour} />
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-6">
               <Action
@@ -96,9 +96,7 @@ function Info({ label, value }) {
   return (
     <div className="p-4 border rounded-lg">
       <div className="text-sm text-gray-500">{label}</div>
-      <div className="font-semibold">
-        {value ? new Date(value).toLocaleTimeString("pt-BR") : "--:--:--"}
-      </div>
+      <div className="font-semibold">{value ? value : "--:--:--"}</div>
     </div>
   );
 }

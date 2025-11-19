@@ -55,11 +55,11 @@ export default function Relatorios() {
               <tbody>
                 {items.map((row, idx) => (
                   <tr key={idx} className="border-t">
-                    <Td>{formatDate(row.date || row.startWork)}</Td>
-                    <Td>{formatTime(row.startWork)}</Td>
-                    <Td>{formatTime(row.startLunch)}</Td>
-                    <Td>{formatTime(row.endLunch)}</Td>
-                    <Td>{formatTime(row.endWork)}</Td>
+                    <Td>{formatDate(row.clockingDate)}</Td>
+                    <Td>{formatTime(row.startWorkHour)}</Td>
+                    <Td>{formatTime(row.startLunchHour)}</Td>
+                    <Td>{formatTime(row.endLunchHour)}</Td>
+                    <Td>{formatTime(row.endWorkHour)}</Td>
                     <Td>
                       <span
                         className={`px-2 py-1 rounded text-xs font-semibold ${
@@ -103,11 +103,7 @@ function Td({ children }) {
   return <td className="px-4 py-2 text-sm">{children}</td>;
 }
 function formatTime(v) {
-  try {
-    return v ? new Date(v).toLocaleTimeString("pt-BR") : "--:--:--";
-  } catch {
-    return "--:--:--";
-  }
+  return v ? v : "--:--:--";
 }
 function formatDate(v) {
   try {

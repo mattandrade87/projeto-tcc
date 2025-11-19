@@ -41,7 +41,6 @@ export default function UsersListPage() {
             <table className="min-w-full border rounded-lg">
               <thead>
                 <tr className="bg-gray-100 text-left">
-                  <Th>ID</Th>
                   <Th>Nome</Th>
                   <Th>Email</Th>
                   <Th>Papel</Th>
@@ -51,7 +50,6 @@ export default function UsersListPage() {
               <tbody>
                 {items.map((u) => (
                   <tr key={u.id} className="border-t">
-                    <Td>{u.id}</Td>
                     <Td>
                       {u.displayName ||
                         `${u.firstName || ""} ${u.lastName || ""}`.trim() ||
