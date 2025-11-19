@@ -18,7 +18,6 @@ function Td({ children }) {
   return <td className="px-4 py-2 text-sm">{children}</td>;
 }
 
-
 export default function ClockingSearchPage() {
   const [status, setStatus] = useState("");
   const [userName, setUserName] = useState("");
@@ -205,11 +204,35 @@ export default function ClockingSearchPage() {
                   </tr>
                 ) : (
                   items.map((r) => (
-                    <tr key={r.clockingId || r.id} className="border-t hover:bg-gray-50">
-                      <Td>{r.userName || r.user?.displayName || r.user?.name || `ID: ${r.userId}`}</Td>
-                      <Td>{r.clockingDate ? new Date(r.clockingDate).toLocaleDateString("pt-BR") : "--/--/----"}</Td>
-                      <Td>{r.startWorkHour || r.startWork ? (r.startWorkHour ? r.startWorkHour : new Date(r.startWork).toLocaleTimeString("pt-BR")) : "--:--:--"}</Td>
-                      <Td>{r.endWorkHour || r.endWork ? (r.endWorkHour ? r.endWorkHour : new Date(r.endWork).toLocaleTimeString("pt-BR")) : "--:--:--"}</Td>
+                    <tr
+                      key={r.clockingId || r.id}
+                      className="border-t hover:bg-gray-50"
+                    >
+                      <Td>
+                        {r.userName ||
+                          r.user?.displayName ||
+                          r.user?.name ||
+                          `ID: ${r.userId}`}
+                      </Td>
+                      <Td>
+                        {r.clockingDate
+                          ? new Date(r.clockingDate).toLocaleDateString("pt-BR")
+                          : "--/--/----"}
+                      </Td>
+                      <Td>
+                        {r.startWorkHour || r.startWork
+                          ? r.startWorkHour
+                            ? r.startWorkHour
+                            : new Date(r.startWork).toLocaleTimeString("pt-BR")
+                          : "--:--:--"}
+                      </Td>
+                      <Td>
+                        {r.endWorkHour || r.endWork
+                          ? r.endWorkHour
+                            ? r.endWorkHour
+                            : new Date(r.endWork).toLocaleTimeString("pt-BR")
+                          : "--:--:--"}
+                      </Td>
                       <Td>
                         <span
                           className={`px-2 py-1 rounded text-xs font-semibold ${
@@ -232,14 +255,18 @@ export default function ClockingSearchPage() {
                           <div className="flex gap-2">
                             <button
                               disabled={acting}
-                              onClick={() => act(ClockingAPI.approve, r.clockingId || r.id)}
+                              onClick={() =>
+                                act(ClockingAPI.approve, r.clockingId || r.id)
+                              }
                               className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 disabled:opacity-50 text-xs"
                             >
                               Aprovar
                             </button>
                             <button
                               disabled={acting}
-                              onClick={() => act(ClockingAPI.reject, r.clockingId || r.id)}
+                              onClick={() =>
+                                act(ClockingAPI.reject, r.clockingId || r.id)
+                              }
                               className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 disabled:opacity-50 text-xs"
                             >
                               Rejeitar
