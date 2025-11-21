@@ -4,6 +4,7 @@ import { AuthAPI } from "@/services/api";
 import { useToast } from "@/context/ToastContext.jsx";
 import Loader from "@/components/ui/Loader";
 import { Title } from "@/app/main-page/components";
+import { BackButton } from "@/components/ui";
 
 export default function NewAdminPage() {
   const [form, setForm] = useState({
@@ -39,6 +40,7 @@ export default function NewAdminPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center px-4 py-8">
       <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-lg">
+        <BackButton />
         <div className="mb-4 text-center">
           <Title>Novo Admin</Title>
         </div>

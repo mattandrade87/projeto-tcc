@@ -16,6 +16,7 @@ export default function AdminHome() {
           <Nav href="/home">Home</Nav>
           <Nav href="/admin/users">Usuários</Nav>
           <Nav href="/admin/clocking/search">Consultar Pontos</Nav>
+          <Nav href="/admin/register">Adicionar Usuário</Nav>
         </div>
       </div>
     </div>
