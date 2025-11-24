@@ -49,6 +49,7 @@ export default function Relatorios() {
                   <Th>Início Almoço</Th>
                   <Th>Fim Almoço</Th>
                   <Th>Fim</Th>
+                  <Th>Horas Trabalhadas</Th>
                   <Th>Status</Th>
                 </tr>
               </thead>
@@ -60,6 +61,7 @@ export default function Relatorios() {
                     <Td>{formatTime(row.startLunchHour)}</Td>
                     <Td>{formatTime(row.endLunchHour)}</Td>
                     <Td>{formatTime(row.endWorkHour)}</Td>
+                    <Td>{formatTime(row.workedHours)}</Td>
                     <Td>
                       <span
                         className={`px-2 py-1 rounded text-xs font-semibold ${
@@ -102,9 +104,23 @@ function Th({ children }) {
 function Td({ children }) {
   return <td className="px-4 py-2 text-sm">{children}</td>;
 }
+
 function formatTime(v) {
-  return v ? v : "--:--:--";
+  if (!v) return "--:--:--";
+  // Se for string no formato ISO 8601 duration (ex: PT4H9M47S)
+  if (typeof v === "string" && v.startsWith("PT")) {
+    // Regex para capturar horas, minutos e segundos
+    const match = v.match(/^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/);
+    if (match) {
+      const h = String(match[1] ? parseInt(match[1]) : 0).padStart(2, "0");
+      const m = String(match[2] ? parseInt(match[2]) : 0).padStart(2, "0");
+      const s = String(match[3] ? parseInt(match[3]) : 0).padStart(2, "0");
+      return `${h}:${m}:${s}`;
+    }
+  }
+  return v;
 }
+
 function formatDate(v) {
   try {
     return v ? new Date(v).toLocaleDateString("pt-BR") : "--/--/----";
