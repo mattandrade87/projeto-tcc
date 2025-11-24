@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { AuthAPI } from "@/services/api";
 import { useToast } from "@/context/ToastContext.jsx";
 import Loader from "@/components/ui/Loader";
@@ -9,7 +10,23 @@ export default function UpdatePasswordPage() {
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [loading, setLoading] = useState(false);
+  const [accessToken, setAccessToken] = useState("");
   const toast = useToast();
+  const router = useRouter();
+
+  useEffect(() => {
+    // Extract access_token from URL hash
+    const hash = window.location.hash;
+    if (hash) {
+      const params = new URLSearchParams(hash.substring(1));
+      const token = params.get("access_token");
+      if (token) {
+        setAccessToken(token);
+      } else {
+        toast.show("Token de acesso não encontrado", "error");
+      }
+    }
+  }, [toast]);
 
   const submit = async (e) => {
     e.preventDefault();
@@ -17,12 +34,15 @@ export default function UpdatePasswordPage() {
       toast.show("Senhas não conferem", "warning");
       return;
     }
+    if (!accessToken) {
+      toast.show("Token de acesso inválido", "error");
+      return;
+    }
     setLoading(true);
     try {
-      await AuthAPI.updatePassword({ password });
+      await AuthAPI.updatePassword({ password }, accessToken);
       toast.show("Senha atualizada", "success");
-      setPassword("");
-      setConfirm("");
+      router.push("/main-page");
     } catch (e) {
       toast.show(e?.message || "Erro ao atualizar senha", "error");
     } finally {

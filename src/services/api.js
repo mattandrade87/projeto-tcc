@@ -79,10 +79,18 @@ export const AuthAPI = {
     );
     return data;
   },
-  updatePassword: async (payload) => {
-    const { data } = await apiClient.patch("/common/auth/update-password", {
-      password: payload.password,
-    });
+  updatePassword: async (payload, accessToken) => {
+    const headers = {};
+    if (accessToken) {
+      headers.Authorization = `Bearer ${accessToken}`;
+    }
+    const { data } = await apiClient.patch(
+      "/common/auth/update-password",
+      {
+        password: payload.password,
+      },
+      { headers }
+    );
     return data;
   },
   registerAdmin: async (payload) => {

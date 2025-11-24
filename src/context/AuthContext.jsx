@@ -11,6 +11,7 @@ const PUBLIC_ROUTES = new Set([
   "/main-page",
   "/main-page/",
   "/login",
+  "/reset-password",
   "/recover-password",
 ]);
 

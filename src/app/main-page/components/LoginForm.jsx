@@ -96,7 +96,7 @@ export default function LoginForm() {
       </div>
 
       <div className="mt-4 text-center">
-        <LinkText href="/recover-password">Esqueceu sua senha?</LinkText>
+        <LinkText href="/reset-password">Esqueceu sua senha?</LinkText>
       </div>
     </form>
   );
