@@ -30,6 +30,10 @@ export default function UpdatePasswordPage() {
 
   const submit = async (e) => {
     e.preventDefault();
+    if (password.length < 6) {
+      toast.show("A senha deve ter mais de 6 caracteres", "warning");
+      return;
+    }
     if (password !== confirm) {
       toast.show("Senhas não conferem", "warning");
       return;
